@@ -1,6 +1,6 @@
 provider "azurerm" {
   # Whilst version is optional, we /strongly recommend/ using it to pin the version of the Provider being used
-  version = "=2.9.0"
+  version = "=2.23.0"
   skip_provider_registration = true
   features {}
 }
@@ -39,10 +39,10 @@ resource "azurerm_function_app" "function-app" {
   app_service_plan_id = azurerm_app_service_plan.service-plan.id
   storage_account_name       = azurerm_storage_account.storage-account.name
   storage_account_access_key = azurerm_storage_account.storage-account.primary_access_key
+  version = "~2"
   app_settings = {
     FUNCTION_APP_EDIT_MODE = "readOnly"
     WEBSITE_RUN_FROM_PACKAGE = 1
-    FUNCTIONS_EXTENSION_VERSION = 2
     FUNCTIONS_WORKER_RUNTIME = "java"
     SCM_DO_BUILD_DURING_DEPLOYMENT = false
     FUNCTIONS_WORKER_RUNTIME_VERSION = 1.8
