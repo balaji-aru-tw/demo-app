@@ -40,13 +40,21 @@ stages:
               includeRootFolder: false
               archiveType: zip
               archiveFile: '$(Build.ArtifactStagingDirectory)/balaji-tw-azure-test.zip'
-          - task: AzureFunctionApp@1
-            inputs:
-              azureSubScription: $(azureSubscription)
-              appType: functionApp
-              appName: $(appName)
-              package: $(Build.ArtifactStagingDirectory)/balaji-tw-azure-test.zip
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: $(Build.ArtifactStagingDirectory)/balaji-tw-azure-test.zip
               artifactName: functionApp
+  - stage: Deploy
+    displayName: Deploy application
+    jobs:
+      - job: BuildAndZipAzureFunction
+        steps:
+          - task: DownloadPipelineArtifact@2
+              inputs:
+                artifact: functionApp
+          - task: AzureFunctionApp@1
+              inputs:
+                azureSubScription: $(azureSubscription)
+                appType: functionApp
+                appName: $(appName)
+                package: $(Pipeline.Workspace)/balaji-tw-azure-test.zip
