@@ -45,7 +45,7 @@ stages:
               azureSubScription: $(azureSubscription)
               appType: functionApp
               appName: $(appName)
-              package: $(Pipeline.Workspace)/balaji-tw-azure-test.zip
+              package: $(Build.ArtifactStagingDirectory)/balaji-tw-azure-test.zip
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: $(Build.ArtifactStagingDirectory)/balaji-tw-azure-test.zip
