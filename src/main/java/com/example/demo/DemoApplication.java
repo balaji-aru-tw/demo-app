@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.microsoft.azure.functions.ExecutionContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,11 +14,8 @@ public class DemoApplication {
     }
 
     @Bean
-    public Function<String, String> reverse(ExecutionContext context) {
-        return value -> {
-            context.getLogger().info("Reversing String - " + value);
-            return new StringBuilder(value).reverse().toString();
-        };
+    public Function<String, String> reverse() {
+        return value -> new StringBuilder(value).reverse().toString();
     }
 
 }
