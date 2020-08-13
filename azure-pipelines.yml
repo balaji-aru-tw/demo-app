@@ -41,11 +41,11 @@ stages:
               archiveType: zip
               archiveFile: '$(Build.ArtifactStagingDirectory)/balaji-tw-azure-test.zip'
           - task: AzureFunctionApp@1
-              inputs:
-                azureSubScription: $(azureSubscription)
-                appType: functionApp
-                appName: $(appName)
-                package: $(Pipeline.Workspace)/balaji-tw-azure-test.zip
+            inputs:
+              azureSubScription: $(azureSubscription)
+              appType: functionApp
+              appName: $(appName)
+              package: $(Pipeline.Workspace)/balaji-tw-azure-test.zip
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: $(Build.ArtifactStagingDirectory)/balaji-tw-azure-test.zip
