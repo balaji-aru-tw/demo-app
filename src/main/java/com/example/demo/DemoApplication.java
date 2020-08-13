@@ -18,7 +18,7 @@ public class DemoApplication {
     public Function<String, String> reverse(ExecutionContext context) {
         return value -> {
             context.getLogger().info("Reversing String - " + value);
-            return new StringBuilder(value).reverse().toString();
+            return new StringBuilder(value).toString();
         };
     }
 
