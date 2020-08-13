@@ -50,11 +50,11 @@ stages:
       - job: BuildAndZipAzureFunction
         steps:
           - task: DownloadPipelineArtifact@2
-              inputs:
-                artifact: functionApp
+            inputs:
+              artifact: functionApp
           - task: AzureFunctionApp@1
-              inputs:
-                azureSubScription: $(azureSubscription)
-                appType: functionApp
-                appName: $(appName)
-                package: $(Pipeline.Workspace)/balaji-tw-azure-test.zip
+            inputs:
+              azureSubScription: $(azureSubscription)
+              appType: functionApp
+              appName: $(appName)
+              package: $(Pipeline.Workspace)/balaji-tw-azure-test.zip
