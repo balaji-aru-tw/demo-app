@@ -1,0 +1,61 @@
+trigger:
+    - master
+    
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  azureSubscription: 'balaji-tw-azure-test-service-connection'
+  appName: 'balaji-tw-azure-test'
+  MAVEN_CACHE_FOLDER: $(HOME)/.m2/repository
+  MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+
+stages:
+
+  - stage: Build
+    displayName: Build application
+    jobs:
+      - job: BuildAndZipAzureFunction
+        steps:
+          - task: Cache@2
+            inputs:
+              key: 'maven | "$(Agent.OS)" | **/pom.xml'
+              restoreKeys: |
+                maven | "$(Agent.OS)"
+                maven
+              path: $(MAVEN_CACHE_FOLDER)
+            displayName: Cache Maven local repo
+          - task: Maven@3
+            displayName: 'Maven Package'
+            inputs:
+              mavenPomFile: 'pom.xml'
+              mavenOptions: '-Xmx3072m $(MAVEN_OPTS)'
+          - task: DeleteFiles@1
+            inputs:
+              SourceFolder: '$(System.DefaultWorkingDirectory)/target/azure-functions/balaji-tw-azure-test'
+              Contents: 'local.settings.json'
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/target/azure-functions/balaji-tw-azure-test'
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: '$(Build.ArtifactStagingDirectory)/balaji-tw-azure-test.zip'
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: $(Build.ArtifactStagingDirectory)/balaji-tw-azure-test.zip
+              artifactName: functionApp
+
+  - stage: Deploy
+    displayName: Deploy FunctionApp
+    jobs:
+      - job: DeployFunctionApp
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: functionApp
+          - task: AzureFunctionApp@1
+            inputs:
+              azureSubScription: $(azureSubscription)
+              appType: functionApp
+              appName: $(appName)
+              package: $(Pipeline.Workspace)/balaji-tw-azure-test.zip
