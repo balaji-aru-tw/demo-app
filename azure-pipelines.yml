@@ -47,7 +47,7 @@ stages:
   - stage: Deploy
     displayName: Deploy application
     jobs:
-      - job: BuildAndZipAzureFunction
+      - job: DeployAzureFunction
         steps:
           - task: DownloadPipelineArtifact@2
             inputs:
