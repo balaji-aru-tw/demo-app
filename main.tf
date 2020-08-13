@@ -45,5 +45,6 @@ resource "azurerm_function_app" "function-app" {
     FUNCTIONS_EXTENSION_VERSION = 2
     FUNCTIONS_WORKER_RUNTIME = "java"
     SCM_DO_BUILD_DURING_DEPLOYMENT = false
+    FUNCTIONS_WORKER_RUNTIME_VERSION = 1.8
   }
 }
